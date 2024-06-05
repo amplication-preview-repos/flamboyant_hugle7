@@ -1,0 +1,94 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  createdAt   DateTime   @default(now())
+  currencies  Currency[]
+  description String?
+  id          String     @id @default(cuid())
+  name        String?
+  reviews     Review[]
+  updatedAt   DateTime   @updatedAt
+}
+
+model Review {
+  comment   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+  rating    Int?
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  reviews   Review[]
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Order {
+  createdAt   DateTime           @default(now())
+  currencies  Currency[]
+  customer    String?
+  date        DateTime?
+  id          String             @id @default(cuid())
+  orderNumber String?
+  product     EnumOrderProduct[]
+  totalAmount Float?
+  updatedAt   DateTime           @updatedAt
+}
+
+model UserLocation {
+  address   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  latitude  Float?
+  longitude Float?
+  updatedAt DateTime @updatedAt
+}
+
+model ProductOrder {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductAddOn {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+}
+
+model Currency {
+  code         String?
+  createdAt    DateTime @default(now())
+  exchangeRate Float?
+  id           String   @id @default(cuid())
+  name         String?
+  order        Order?   @relation(fields: [orderId], references: [id])
+  orderId      String?
+  product      Product? @relation(fields: [productId], references: [id])
+  productId    String?
+  symbolField  String?
+  updatedAt    DateTime @updatedAt
+}
+
+enum EnumOrderProduct {
+  Option1
+}
