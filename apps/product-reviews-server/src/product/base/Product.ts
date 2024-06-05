@@ -11,8 +11,10 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, IsOptional } from "class-validator";
+import { IsDate, ValidateNested, IsOptional, IsString } from "class-validator";
 import { Type } from "class-transformer";
+import { Currency } from "../../currency/base/Currency";
+import { Review } from "../../review/base/Review";
 
 @ObjectType()
 class Product {
@@ -23,6 +25,15 @@ class Product {
   @Type(() => Date)
   @Field(() => Date)
   createdAt!: Date;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Currency],
+  })
+  @ValidateNested()
+  @Type(() => Currency)
+  @IsOptional()
+  currencies?: Array<Currency>;
 
   @ApiProperty({
     required: false,
@@ -53,6 +64,15 @@ class Product {
     nullable: true,
   })
   name!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => [Review],
+  })
+  @ValidateNested()
+  @Type(() => Review)
+  @IsOptional()
+  reviews?: Array<Review>;
 
   @ApiProperty({
     required: true,

@@ -11,10 +11,25 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
+import { CurrencyCreateNestedManyWithoutProductsInput } from "./CurrencyCreateNestedManyWithoutProductsInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { ReviewCreateNestedManyWithoutProductsInput } from "./ReviewCreateNestedManyWithoutProductsInput";
 
 @InputType()
 class ProductCreateInput {
+  @ApiProperty({
+    required: false,
+    type: () => CurrencyCreateNestedManyWithoutProductsInput,
+  })
+  @ValidateNested()
+  @Type(() => CurrencyCreateNestedManyWithoutProductsInput)
+  @IsOptional()
+  @Field(() => CurrencyCreateNestedManyWithoutProductsInput, {
+    nullable: true,
+  })
+  currencies?: CurrencyCreateNestedManyWithoutProductsInput;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -36,6 +51,18 @@ class ProductCreateInput {
     nullable: true,
   })
   name?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => ReviewCreateNestedManyWithoutProductsInput,
+  })
+  @ValidateNested()
+  @Type(() => ReviewCreateNestedManyWithoutProductsInput)
+  @IsOptional()
+  @Field(() => ReviewCreateNestedManyWithoutProductsInput, {
+    nullable: true,
+  })
+  reviews?: ReviewCreateNestedManyWithoutProductsInput;
 }
 
 export { ProductCreateInput as ProductCreateInput };

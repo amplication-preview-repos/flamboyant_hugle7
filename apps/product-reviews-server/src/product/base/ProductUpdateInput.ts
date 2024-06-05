@@ -11,10 +11,25 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
+import { CurrencyUpdateManyWithoutProductsInput } from "./CurrencyUpdateManyWithoutProductsInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { ReviewUpdateManyWithoutProductsInput } from "./ReviewUpdateManyWithoutProductsInput";
 
 @InputType()
 class ProductUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => CurrencyUpdateManyWithoutProductsInput,
+  })
+  @ValidateNested()
+  @Type(() => CurrencyUpdateManyWithoutProductsInput)
+  @IsOptional()
+  @Field(() => CurrencyUpdateManyWithoutProductsInput, {
+    nullable: true,
+  })
+  currencies?: CurrencyUpdateManyWithoutProductsInput;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -36,6 +51,18 @@ class ProductUpdateInput {
     nullable: true,
   })
   name?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => ReviewUpdateManyWithoutProductsInput,
+  })
+  @ValidateNested()
+  @Type(() => ReviewUpdateManyWithoutProductsInput)
+  @IsOptional()
+  @Field(() => ReviewUpdateManyWithoutProductsInput, {
+    nullable: true,
+  })
+  reviews?: ReviewUpdateManyWithoutProductsInput;
 }
 
 export { ProductUpdateInput as ProductUpdateInput };
